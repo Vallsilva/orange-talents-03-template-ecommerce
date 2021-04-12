@@ -1,11 +1,11 @@
-package br.com.zupacademy.valeria.mercadolivre.customer;
+package br.com.zupacademy.valeria.mercadolivre.user;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 
-public class CustomerRequest {
+public class UserRequest {
 
     @NotBlank @Email
     private String login;
@@ -13,7 +13,7 @@ public class CustomerRequest {
     private String password;
 
 
-    public CustomerRequest() {
+    public UserRequest() {
 
     }
 
@@ -26,7 +26,7 @@ public class CustomerRequest {
     }
 
 
-    public CustomerModel toModel() {
-        return new CustomerModel(this.login, this.password);
+    public UserModel toModel() {
+        return new UserModel(this.login, this.password);
     }
 }

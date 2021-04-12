@@ -1,4 +1,4 @@
-package br.com.zupacademy.valeria.mercadolivre.customer;
+package br.com.zupacademy.valeria.mercadolivre.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,14 +10,14 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/customer")
-public class CustomerController {
+public class UserController {
 
     @Autowired
-    private CustomerRepository repository;
+    private UserRepository repository;
 
     @PostMapping
-    public CustomerModel crateUser(@RequestBody @Valid CustomerRequest request){
-        CustomerModel model = request.toModel();
+    public UserModel crateUser(@RequestBody @Valid UserRequest request){
+        UserModel model = request.toModel();
         return model;
     }
 }
