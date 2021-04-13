@@ -1,5 +1,7 @@
 package br.com.zupacademy.valeria.mercadolivre.user;
 
+import br.com.zupacademy.valeria.mercadolivre.config.validator.UniqueValue;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -7,7 +9,7 @@ import javax.validation.constraints.Size;
 
 public class UserRequest {
 
-    @NotBlank @Email
+    @NotBlank @Email @UniqueValue(domainClass = UserModel.class, fieldName = "login")
     private String login;
     @NotBlank @Size(min = 6)
     private String password;

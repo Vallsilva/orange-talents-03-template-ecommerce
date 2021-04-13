@@ -1,4 +1,4 @@
-package br.com.zupacademy.valeria.mercadolivre.user.validatorUser;
+package br.com.zupacademy.valeria.mercadolivre.config.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

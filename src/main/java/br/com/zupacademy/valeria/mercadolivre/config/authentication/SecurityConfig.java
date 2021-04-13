@@ -1,5 +1,6 @@
-package br.com.zupacademy.valeria.mercadolivre.config;
+package br.com.zupacademy.valeria.mercadolivre.config.authentication;
 
+import br.com.zupacademy.valeria.mercadolivre.config.authentication.OpenURLS;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;

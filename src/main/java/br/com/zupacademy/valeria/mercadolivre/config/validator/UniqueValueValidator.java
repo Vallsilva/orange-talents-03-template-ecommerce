@@ -1,4 +1,4 @@
-package br.com.zupacademy.valeria.mercadolivre.user.validatorUser;
+package br.com.zupacademy.valeria.mercadolivre.config.validator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,10 +25,10 @@ public class UniqueValueValidator  implements ConstraintValidator<UniqueValue, O
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
 
-        Query query = em.createQuery("SELECT 1 FROM" + domainClass.getName() + "WHERE" + fieldName + " = :value");
+        Query query = em.createQuery("SELECT 1 FROM " + domainClass.getName() + " WHERE " + fieldName + " = :value");
         query.setParameter("value", value);
         List<?> resultList = query.getResultList();
-        
+
         return resultList.isEmpty();
     }
 }
