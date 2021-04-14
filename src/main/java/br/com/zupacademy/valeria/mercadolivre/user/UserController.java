@@ -16,8 +16,11 @@ public class UserController {
     private UserRepository repository;
 
     @PostMapping
-    public UserModel crateUser(@RequestBody @Valid UserRequest request){
+    public UserModel createUser(@RequestBody @Valid UserRequest request){
+
         UserModel model = request.toModel();
+        repository.save(model);
+
         return model;
     }
 }

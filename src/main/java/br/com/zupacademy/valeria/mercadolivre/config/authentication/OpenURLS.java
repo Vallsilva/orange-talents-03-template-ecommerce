@@ -5,6 +5,7 @@ public class OpenURLS {
     public static final String[] VALUES = {
             "/h2-console/**",
             "/user/**",
-            "/category"
+            "/category",
+            "/auth/**"
     };
 }
