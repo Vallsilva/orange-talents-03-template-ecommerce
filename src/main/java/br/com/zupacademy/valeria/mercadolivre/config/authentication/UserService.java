@@ -13,7 +13,7 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
 
@@ -21,8 +21,7 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public UserService() {
-    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

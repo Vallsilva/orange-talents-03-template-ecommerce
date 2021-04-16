@@ -3,8 +3,10 @@ package br.com.zupacademy.valeria.mercadolivre.config.authentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import br.com.zupacademy.valeria.mercadolivre.config.jwt.JwtAuthenticationFilter;
 import br.com.zupacademy.valeria.mercadolivre.config.jwt.TokenManager;
@@ -57,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(new JwtAuthenticationFilter(tokenManager, userService), UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userService)
+                .passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override

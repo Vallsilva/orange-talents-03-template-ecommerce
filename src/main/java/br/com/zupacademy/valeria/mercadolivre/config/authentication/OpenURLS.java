@@ -6,6 +6,7 @@ public class OpenURLS {
             "/h2-console/**",
             "/user/**",
             "/category",
-            "/auth/**"
+            "/auth",
+            "/product/**"
     };
 }
