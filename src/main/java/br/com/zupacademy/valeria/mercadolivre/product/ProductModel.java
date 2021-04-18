@@ -2,10 +2,14 @@ package br.com.zupacademy.valeria.mercadolivre.product;
 
 import br.com.zupacademy.valeria.mercadolivre.category.CategoryModel;
 import br.com.zupacademy.valeria.mercadolivre.product.details.DetailsProduct;
+import br.com.zupacademy.valeria.mercadolivre.user.UserModel;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,10 +26,17 @@ public class ProductModel {
     private String descriptionProduct;
     @ManyToOne
     private CategoryModel categoryModel;
+    @PastOrPresent
     private LocalDate createdAt;
+    @NotNull
+    @ManyToOne
+    private UserModel owner;
+
+    @ElementCollection
+    private List<String> imagesUrl = new ArrayList<>();
 
     public ProductModel(String name, BigDecimal price, Long amount, List<DetailsProduct> detailsProduct, String descriptionProduct,
-                        CategoryModel categoryModel) {
+                        CategoryModel categoryModel, UserModel owner) {
         this.name = name;
         this.price = price;
         this.amount = amount;
@@ -33,9 +44,18 @@ public class ProductModel {
         this.descriptionProduct = descriptionProduct;
         this.categoryModel = categoryModel;
         this.createdAt = LocalDate.now();
+        this.owner = owner;
     }
 
     public ProductModel() {
+    }
+
+    public boolean isOwner(UserModel user){
+        return user.equals(this.owner);
+    }
+
+    public void addImage(String image){
+       imagesUrl.add(image);
     }
 
     public Long getId() {
@@ -97,5 +117,9 @@ public class ProductModel {
 
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<String> getImagesUrl() {
+        return imagesUrl;
     }
 }
