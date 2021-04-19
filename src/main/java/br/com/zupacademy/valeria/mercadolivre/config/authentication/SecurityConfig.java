@@ -45,22 +45,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    //Metodo para controlar acesso nos recursos
     @Override
     protected void configure(HttpSecurity http) throws Exception {
        http.authorizeRequests()
                .antMatchers(OpenURLS.VALUES).permitAll()
-               .anyRequest().authenticated();
+               .anyRequest().authenticated(); //Aqui permite que todos os endpoints definidos em OpenURLS sejam abertos a quem estiver autenticado
 
        http.csrf().disable();
        http.headers().frameOptions().disable();
 
-       http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+       http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //Define o tipo de sessão como Stateless
 
 
         http.addFilterBefore(new JwtAuthenticationFilter(tokenManager, userService), UsernamePasswordAuthenticationFilter.class);
+
         http.exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint());
     }
 
+    //Metodo para chamar toda a autenticação. Esse metodo chama a autenticação e criptografa a mesma
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)

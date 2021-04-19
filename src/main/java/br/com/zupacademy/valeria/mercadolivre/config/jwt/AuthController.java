@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+//endpoint para gerar token
+
 @Api
 @RestController
 @RequestMapping("/auth")
@@ -21,13 +23,14 @@ public class AuthController {
     @Autowired
     private TokenManager tokenManager;
 
-    @PostMapping
+    @PostMapping //Recebe como parametro um objeto
     public ResponseEntity<AuthTokenOutput> authenticate(@RequestBody UserLoginRequest loginRequest){
+
         UsernamePasswordAuthenticationToken authenticationToken = loginRequest.build();
 
-        System.out.println("Até aqui funciona - antes authenticate");
+
         Authentication auth =authenticationManager.authenticate(authenticationToken);
-        System.out.println("Até aqui funciona - authenticate");
+
         String jwt = tokenManager.generateToken(auth);
         var tokenResponse = new AuthTokenOutput("Bearer ", jwt);
 

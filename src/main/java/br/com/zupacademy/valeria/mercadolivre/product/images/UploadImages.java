@@ -1,4 +1,4 @@
-package br.com.zupacademy.valeria.mercadolivre.product;
+package br.com.zupacademy.valeria.mercadolivre.product.images;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;

@@ -21,12 +21,12 @@ public class TokenManager {
     @Value("${mercadolivre.jwt.expiration}")
     private Long expirationMillis;
 
-    //Não entendi
+
     public static final String AUTHORITIES_KEY = "scopes";
 
     //Metodo para gerar o token
     public String generateToken(Authentication auth){
-        //
+        //Pega o usuário logado
         UserModel user = (UserModel) auth.getPrincipal();
 
         //set data de expiração do token
@@ -39,10 +39,10 @@ public class TokenManager {
 
         //a chamada desses metodos gera o token com base no algoritmo definido
         return Jwts.builder().setIssuer("MERCADOLIVRE")
-                .setSubject(Long.toString(user.getId()))
+                .setSubject(Long.toString(user.getId())) //Pega o usuario pelo id
                 .claim("AUTHORITIES_KEY", authorities)
-                .setIssuedAt(now).setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, this.secret)
+                .setIssuedAt(now).setExpiration(expiration) //Define o tempo de quando o metodo foi chamado e seta a expiração
+                .signWith(SignatureAlgorithm.HS256, this.secret) //define o algoritmo que vai croptiografar a senha a ser criptografada
                 .compact();
     }
 
@@ -56,7 +56,7 @@ public class TokenManager {
         }
     }
 
-    //Metodo para pegar
+
     public Long getUserIdRequestToken(String jwt){
         Claims claims = Jwts.parser().setSigningKey(this.secret)
                 .parseClaimsJws(jwt).getBody();

@@ -22,13 +22,14 @@ public class UserService implements UserDetailsService {
     }
 
 
-
+//Busca o usuário no banco e retorna exceção se não encontrar
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<UserModel> user = userRepository.findByLogin(email);
         return user.orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
     }
 
+    //busca o id do usuario no banco e retorna exceção se não encontrar
     public UserDetails loadUserById(Long userId) {
         Optional<UserModel> user = userRepository.findById(userId);
         return user.orElseThrow(() -> new UsernameNotFoundException("ID not found!"));

@@ -16,6 +16,7 @@ public class UserLoginRequest {
     @NotBlank
     private String plainPassword;
 
+    //
     public UsernamePasswordAuthenticationToken build(){
         return new UsernamePasswordAuthenticationToken(this.email, this.plainPassword);
     }

@@ -1,4 +1,6 @@
-package br.com.zupacademy.valeria.mercadolivre.product;
+package br.com.zupacademy.valeria.mercadolivre.product.images;
+
+import br.com.zupacademy.valeria.mercadolivre.product.ProductModel;
 
 import java.util.List;
 

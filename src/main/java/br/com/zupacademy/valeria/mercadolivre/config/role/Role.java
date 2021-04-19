@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+//Classe para definir tipos de perfis que acessem a aplicação
 @Entity
 public class Role implements GrantedAuthority {
 

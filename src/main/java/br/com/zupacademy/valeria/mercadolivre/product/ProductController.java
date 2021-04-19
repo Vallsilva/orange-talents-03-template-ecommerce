@@ -5,10 +5,17 @@ import br.com.zupacademy.valeria.mercadolivre.category.CategoryModel;
 import br.com.zupacademy.valeria.mercadolivre.category.CategoryRepository;
 import br.com.zupacademy.valeria.mercadolivre.product.details.DetailsProduct;
 import br.com.zupacademy.valeria.mercadolivre.product.details.DetailsProductRepository;
+import br.com.zupacademy.valeria.mercadolivre.product.images.ProductImagesResponse;
+import br.com.zupacademy.valeria.mercadolivre.product.images.UploadImages;
+import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpinionModel;
+import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpinionRequest;
+import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpinionResponse;
+import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpnionRepository;
 import br.com.zupacademy.valeria.mercadolivre.user.UserModel;
 import br.com.zupacademy.valeria.mercadolivre.user.UserRepository;
 import io.swagger.annotations.Api;
 import javassist.tools.web.BadHttpRequest;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +40,11 @@ public class ProductController {
     private CategoryRepository categoryRepository;
     @Autowired
     private DetailsProductRepository detailsProductRepository;
-
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProductOpnionRepository opnionRepository;
 
     @Transactional
     @PostMapping
@@ -69,6 +78,21 @@ public class ProductController {
             return ResponseEntity.ok(responseImage);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @PostMapping("/{idProduct}/opinion")
+    public ResponseEntity<?> opnionProduct(@Valid @RequestBody ProductOpinionRequest opinionRequest, @PathVariable Long idProduct, Principal principal){
+
+        UserModel loggedUser = userRepository.getByLogin(principal.getName());
+        ProductModel productModel = repository.findById(idProduct).get();
+        ProductOpinionModel opinionModel = opinionRequest.toModel(productModel, loggedUser);
+        if (!productModel.isOwner(loggedUser)){
+            opnionRepository.save(opinionModel);
+
+            ProductOpinionResponse opinionResponse = new ProductOpinionResponse(opinionModel, loggedUser,productModel);
+            return ResponseEntity.ok(opinionResponse);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }
