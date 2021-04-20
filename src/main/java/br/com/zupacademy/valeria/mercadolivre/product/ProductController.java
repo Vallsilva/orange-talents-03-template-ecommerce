@@ -11,6 +11,7 @@ import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpinionMode
 import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpinionRequest;
 import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpinionResponse;
 import br.com.zupacademy.valeria.mercadolivre.product.opinion.ProductOpnionRepository;
+import br.com.zupacademy.valeria.mercadolivre.product.question.*;
 import br.com.zupacademy.valeria.mercadolivre.user.UserModel;
 import br.com.zupacademy.valeria.mercadolivre.user.UserRepository;
 import io.swagger.annotations.Api;
@@ -42,9 +43,10 @@ public class ProductController {
     private DetailsProductRepository detailsProductRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ProductOpnionRepository opnionRepository;
+    @Autowired
+    private ProductQuestionRepository questionRepository;
 
     @Transactional
     @PostMapping
@@ -64,15 +66,15 @@ public class ProductController {
     }
 
     @PostMapping("/{productId}/upload")
-    public ResponseEntity<?> uploadImage(@RequestPart(name = "image")MultipartFile image, @PathVariable Long productId,
-                                         Principal principal) throws Exception{
+    public ResponseEntity<?> uploadImage(@RequestPart(name = "image") MultipartFile image, @PathVariable Long productId,
+                                         Principal principal) throws Exception {
 
         UserModel loggedUser = userRepository.findByLogin(principal.getName()).orElseThrow(BindException::new);
         ProductModel product = repository.findById(productId).orElseThrow(BadHttpRequest::new);
 
         String imageUrl = UploadImages.upload(image);
 
-        if(product.isOwner(loggedUser)){
+        if (product.isOwner(loggedUser)) {
             product.addImage(imageUrl);
             ProductImagesResponse responseImage = new ProductImagesResponse(product);
             return ResponseEntity.ok(responseImage);
@@ -81,18 +83,36 @@ public class ProductController {
     }
 
     @PostMapping("/{idProduct}/opinion")
-    public ResponseEntity<?> opnionProduct(@Valid @RequestBody ProductOpinionRequest opinionRequest, @PathVariable Long idProduct, Principal principal){
+    public ResponseEntity<?> opnionProduct(@Valid @RequestBody ProductOpinionRequest opinionRequest, @PathVariable Long idProduct, Principal principal) {
 
         UserModel loggedUser = userRepository.getByLogin(principal.getName());
         ProductModel productModel = repository.findById(idProduct).get();
         ProductOpinionModel opinionModel = opinionRequest.toModel(productModel, loggedUser);
-        if (!productModel.isOwner(loggedUser)){
+        if (!productModel.isOwner(loggedUser)) {
             opnionRepository.save(opinionModel);
 
-            ProductOpinionResponse opinionResponse = new ProductOpinionResponse(opinionModel, loggedUser,productModel);
+            ProductOpinionResponse opinionResponse = new ProductOpinionResponse(opinionModel, loggedUser, productModel);
             return ResponseEntity.ok(opinionResponse);
         }
         return ResponseEntity.badRequest().build();
     }
 
+    @PostMapping("/{idProduct}/question")
+    public ResponseEntity<?> questionProduct(@Valid @RequestBody ProductQuestionRequest questionRequest, @PathVariable Long idProduct, Principal principal) {
+        ProductModel productModel = repository.findById(idProduct).get();
+        UserModel loggedUser = userRepository.getByLogin(principal.getName());
+
+        ProductQuestionModel questionModel = questionRequest.toModel(productModel, loggedUser);
+
+        questionRepository.save(questionModel);
+
+        SendEmail sendEmail = new SendEmail();
+        sendEmail.sendEmail();
+
+        ProductQuestionResponse questionResponse = new ProductQuestionResponse(questionModel);
+        return ResponseEntity.ok(questionResponse);
+
+
+    }
 }
+
