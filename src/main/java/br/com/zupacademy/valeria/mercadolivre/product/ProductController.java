@@ -23,11 +23,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.GeneratedValue;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.BindException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Api
@@ -112,6 +114,24 @@ public class ProductController {
         ProductQuestionResponse questionResponse = new ProductQuestionResponse(questionModel);
         return ResponseEntity.ok(questionResponse);
 
+
+    }
+
+    @GetMapping("/{idProduct}/search")
+    public ResponseEntity<?> search(@PathVariable Long idProduct){
+
+        ProductModel productModel = repository.findById(idProduct).get();
+
+        List<String> questions = questionRepository.getQuestions(idProduct);
+
+        Optional<ProductOpinionModel> opinionModel = opnionRepository.findById(idProduct);
+
+        int totalRatings = opnionRepository.getTotal(idProduct);
+        Double averageRatings = opnionRepository.getMedia(idProduct);
+
+        ProductInfoResponse infoResponse = new ProductInfoResponse(productModel, averageRatings, totalRatings, opinionModel, questions);
+
+        return ResponseEntity.ok(infoResponse);
 
     }
 }
