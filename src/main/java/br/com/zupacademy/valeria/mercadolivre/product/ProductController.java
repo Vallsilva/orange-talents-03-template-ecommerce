@@ -52,10 +52,10 @@ public class ProductController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid ProductRequest request, Principal principal) {
+    public ResponseEntity create(@RequestBody @Valid ProductRequest request, Principal principal) throws Exception{
 
         UserModel loggedUser = userRepository.getByLogin(principal.getName());
-        CategoryModel category = categoryRepository.findById(request.getIdCategoryModel()).get();
+        CategoryModel category = categoryRepository.findById(request.getIdCategoryModel()).orElseThrow(BindException::new);
 
         List<DetailsProduct> details = request.getDetailsProduct().stream().map(detailsProductRepository::save).collect(Collectors.toList());
 

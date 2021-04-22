@@ -50,6 +50,15 @@ public class ProductModel {
     public ProductModel() {
     }
 
+    public boolean hasStock(Long quantityPurchased){
+        return this.amount >= quantityPurchased;
+
+    }
+
+    public UserModel getOwner() {
+        return owner;
+    }
+
     public boolean isOwner(UserModel user){
         return user.equals(this.owner);
     }
@@ -121,5 +130,11 @@ public class ProductModel {
 
     public List<String> getImagesUrl() {
         return imagesUrl;
+    }
+
+    public void descrementStock(Long quantityItems) {
+        if (hasStock(quantityItems)){
+            this.amount = this.amount - quantityItems;
+        }
     }
 }

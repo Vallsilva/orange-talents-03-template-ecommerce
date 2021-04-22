@@ -8,6 +8,7 @@ public class OpenURLS {
             "/user/**",
             "/category",
             "/auth",
-            "/product/**"
+            "/product/**",
+            "/acquisition/**"
     };
 }
