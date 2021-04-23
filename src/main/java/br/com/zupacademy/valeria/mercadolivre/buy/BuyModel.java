@@ -77,4 +77,10 @@ public class BuyModel {
     public BuyStatus getStatus() {
         return status;
     }
+
+    public void setStatus(BuyStatus status) throws Exception {
+        if(BuyStatus.COMPLETED.equals(status))
+            throw new Exception("Changing a completed buy is not allowed!");
+        this.status = status;
+    }
 }
